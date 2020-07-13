@@ -8,4 +8,8 @@
     <input type="submit" value="Make shorter">
 </form>
 
+{% if short_url != None %}
+Your shorter URL: {{ short_url }}
+{% endif %}
+
 {% endblock %}

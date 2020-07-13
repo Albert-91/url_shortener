@@ -1,7 +1,5 @@
 import logging
 
-from django.db import transaction
-from django.db.utils import DatabaseError
 from django.shortcuts import render
 from django.views import View
 
@@ -21,11 +19,8 @@ class UrlView(View):
     def post(self, request, *args, **kwargs):
         form = UrlForm(data=request.POST)
         if form.is_valid():
-            try:
-                with transaction.atomic():
-                    Url.objects.create(user_url=form.cleaned_data['user_url'])
-            except DatabaseError as e:
-                logger.error(e)
-            else:
-                return render(request, 'url_form.html', {'form': form})
+            url, _ = Url.objects.get_or_create(user_url=form.cleaned_data['user_url'])
+            short_url = url.get_short_url(request)
+            render(request, 'url_form.html', {'form': form, 'short_url': short_url})
+            return render(request, 'url_form.html', {'form': form, 'short_url': short_url})
         return render(request, 'url_form.html', {'form': form})
