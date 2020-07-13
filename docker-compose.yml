@@ -1,0 +1,45 @@
+version: '3.7'
+
+services:
+
+  db:
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    image: postgres:9.6.17
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db_data:/var/lib/postgresql/data/
+
+  app:
+    build:
+      context: .
+    command: bash wait_for_postgres.sh db:5432 python3 manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+      - migration
+    env_file:
+      - .env
+    links:
+      - db
+    ports:
+      - 8000:8000
+    volumes:
+      - ./project:/app/project
+      - ./url_shortener:/app/url_shortener
+
+  migration:
+    build:
+      context: .
+    command: bash wait_for_postgres.sh db:5432 python3 manage.py migrate
+    depends_on:
+      - db
+    env_file:
+      - .env
+    links:
+      - db
+    ports:
+      - 8000
+    volumes:
+      - ./project:/app/project
+      - ./url_shortener:/app/url_shortener
