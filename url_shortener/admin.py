@@ -6,6 +6,9 @@ from url_shortener.models import Url
 class UrlAdmin(admin.ModelAdmin):
     model = Url
     list_display = ['user_url', 'url_hash']
+    list_per_page = 25
+    search_fields=('user_url',)
+    list_filter=('user_url',)
 
 
 admin.site.register(Url, UrlAdmin)
