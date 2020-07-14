@@ -1,4 +1,5 @@
-import base64
+import os
+from hashlib import blake2b
 from typing import Text
 from urllib.parse import urlunparse
 
@@ -34,4 +35,5 @@ class Url(Timestamps, models.Model):
 
     @staticmethod
     def encode_url(url: Text) -> Text:
-        return base64.b64encode(bytes(url, encoding='utf-8')).decode(encoding='utf-8')[:200]
+        salt = os.urandom(blake2b.SALT_SIZE)
+        return blake2b(bytes(url, encoding='utf-8'), digest_size=10, salt=salt).hexdigest()
