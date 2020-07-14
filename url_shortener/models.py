@@ -12,7 +12,7 @@ from url_shortener.mixins import Timestamps
 class Url(Timestamps, models.Model):
 
     regex = '(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})'
-    user_url = models.URLField(_("User URL"), blank=False, max_length=1000, null=False, unique=True,
+    user_url = models.URLField(_("URL"), blank=False, max_length=1000, null=False, unique=True,
                                validators=[RegexValidator(regex=regex, message='Invalid URL')])
     url_hash = models.URLField(_("Hash URL"), blank=False, max_length=200, null=False, unique=True)
 
