@@ -9,7 +9,7 @@
 </form>
 
 {% if short_url != None %}
-Your shorter URL: {{ short_url }}
+Your shorter URL: <a href="{{ url.get_absolute_url }}">{{ short_url }}</a>
 {% endif %}
 
 {% endblock %}

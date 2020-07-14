@@ -22,12 +22,15 @@ class Url(Timestamps, models.Model):
         verbose_name_plural = _("urls")
 
     def get_short_url(self, request) -> Text:
-        scheme, host = request.META['HTTP_HOST'], request.META['wsgi.url_scheme']
+        scheme, host = request.META['wsgi.url_scheme'], request.META['HTTP_HOST']
         return urlunparse((scheme, host, self.url_hash, None, None, None))
 
     def save(self, *args, **kwargs):
         self.url_hash = self.encode_url(self.user_url)
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return self.user_url
 
     @staticmethod
     def encode_url(url: Text) -> Text:
