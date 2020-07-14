@@ -3,19 +3,17 @@ from hashlib import blake2b
 from typing import Text
 from urllib.parse import urlunparse
 
-from django.core.validators import RegexValidator
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from django.conf import settings
 from url_shortener.mixins import Timestamps
+from .validators import validate_url
 
 
 class UrlStore(Timestamps, models.Model):
 
-    regex = '(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})'
-    user_url = models.URLField(_("URL"), blank=False, max_length=1000, null=False, unique=True,
-                               validators=[RegexValidator(regex=regex, message='Invalid URL')])
+    user_url = models.URLField(_("URL"), blank=False, max_length=1000, null=False, unique=True, validators=[validate_url])
     url_hash = models.CharField(_("Hash URL"), blank=False, max_length=200, null=False, unique=True)
 
     class Meta:
