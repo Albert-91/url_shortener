@@ -1,10 +1,10 @@
 from django import forms
 
-from url_shortener.models import Url
+from url_shortener.models import UrlStore
 
 
-class UrlForm(forms.ModelForm):
+class UrlStoreForm(forms.ModelForm):
 
     class Meta:
-        model = Url
+        model = UrlStore
         fields = ['user_url']
