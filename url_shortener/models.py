@@ -20,10 +20,6 @@ class UrlStore(Timestamps, models.Model):
     def __str__(self):
         return self.user_url
 
-    def get_short_url(self, request) -> Text:
-        scheme, host = request.META['wsgi.url_scheme'], request.META['HTTP_HOST']
-        return urlunparse((scheme, host, self.url_hash, None, None, None))
-
     def save(self, *args, **kwargs):
         if not self.url_hash:
             self.url_hash = encode_string(self.user_url)
@@ -32,7 +28,5 @@ class UrlStore(Timestamps, models.Model):
     def get_absolute_url(self):
         return self.user_url
 
-    @staticmethod
-    def encode_url(url: Text) -> Text:
-        salt = os.urandom(blake2b.SALT_SIZE)
-        return blake2b(bytes(url, encoding='utf-8'), digest_size=getattr(settings, "SHORT_URL_DEFAULT_LENGTH", 10), salt=salt).hexdigest()
+    def get_short_url(self):
+        return 'http://{}/{}'.format(getattr(settings, "DOMAIN_NAME"), self.url_hash)

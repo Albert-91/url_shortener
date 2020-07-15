@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ['localhost']
 if os.environ.get('SITE_HOST'):
     ALLOWED_HOSTS.append(os.environ.get('SITE_HOST'))
 
+DOMAIN_NAME = os.environ.get('SITE_HOST', 'localhost')
 
 # Application definition
 

@@ -6,7 +6,7 @@ from url_shortener.validators import validate_url
 
 
 class UrlStoreForm(forms.ModelForm):
-    user_url = CharField(validators=[validate_url])
+    user_url = CharField(label='URL', validators=[validate_url])
 
     class Meta:
         model = UrlStore
