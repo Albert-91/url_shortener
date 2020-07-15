@@ -1,15 +1,15 @@
 from django.conf import settings
+from django.core.validators import URLValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from url_shortener.mixins import Timestamps
 from .utils import encode_string
-from .validators import validate_url
 
 
 class UrlStore(Timestamps, models.Model):
 
-    user_url = models.URLField(_("URL"), blank=False, max_length=1000, null=False, unique=True, validators=[validate_url])
+    user_url = models.URLField(_("URL"), blank=False, max_length=1000, null=False, unique=True, validators=[URLValidator()])
     url_hash = models.CharField(_("Hash URL"), blank=False, max_length=200, null=False, unique=True)
 
     class Meta:
