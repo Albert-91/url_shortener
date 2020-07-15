@@ -25,7 +25,8 @@ class UrlView(View):
             logger.debug("Created %s" % url)
             short_url = url.get_short_url()
             logger.debug('Successfully hashed provided URL with value: %s' % short_url)
-            return render(request, 'url_form.html', ctx.update({'short_url': short_url, 'url': url}))
+            ctx.update({'short_url': short_url, 'url': url})
+            return render(request, 'url_form.html', ctx)
         return render(request, 'url_form.html', ctx)
 
 
