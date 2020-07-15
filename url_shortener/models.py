@@ -1,13 +1,9 @@
-import os
-from hashlib import blake2b
-from typing import Text
-from urllib.parse import urlunparse
-
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from url_shortener.mixins import Timestamps
+from .utils import encode_string
 from .validators import validate_url
 
 
@@ -30,7 +26,7 @@ class UrlStore(Timestamps, models.Model):
 
     def save(self, *args, **kwargs):
         if not self.url_hash:
-            self.url_hash = self.encode_url(self.user_url)
+            self.url_hash = encode_string(self.user_url)
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):

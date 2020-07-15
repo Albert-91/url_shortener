@@ -21,7 +21,7 @@ class UrlView(View):
         form = UrlStoreForm(data=request.POST)
         if form.is_valid():
             url, _ = UrlStore.objects.get_or_create(user_url=form.cleaned_data['user_url'])
-            short_url = url.get_short_url(request)
+            short_url = url.get_short_url()
             return render(request, 'url_form.html', {'form': form, 'short_url': short_url, 'url': url})
         return render(request, 'url_form.html', {'form': form})
 
