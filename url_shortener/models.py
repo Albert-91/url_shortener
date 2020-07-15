@@ -22,7 +22,7 @@ class UrlStore(Timestamps, models.Model):
 
     def save(self, *args, **kwargs):
         if not self.url_hash:
-            self.url_hash = encode_string(self.user_url)
+            self.url_hash = encode_string(s=self.user_url, size=getattr(settings, "SHORT_URL_DEFAULT_LENGTH", 10))
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
