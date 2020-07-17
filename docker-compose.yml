@@ -23,7 +23,7 @@ services:
     links:
       - db
     ports:
-      - 80:8000
+      - 8000:8000
     volumes:
       - ./project:/app/project
       - ./url_shortener:/app/url_shortener

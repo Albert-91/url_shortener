@@ -21,12 +21,12 @@ class UrlView(View):
         form = UrlStoreForm(data=request.POST)
         ctx = {'form': form}
         if form.is_valid():
-            url, _ = UrlStore.objects.get_or_create(user_url=form.cleaned_data['user_url'])
-            logger.debug("Created %s" % url)
+            url, is_created = UrlStore.objects.get_or_create(user_url=form.cleaned_data['user_url'])
             short_url = url.get_short_url()
-            logger.debug('Successfully hashed provided URL with value: %s' % short_url)
-            ctx.update({'short_url': short_url, 'url': url})
-            return render(request, 'url_form.html', ctx)
+            if is_created:
+                logger.debug("Created %s" % url)
+                logger.debug('Successfully hashed provided URL with value: %s' % short_url)
+            ctx.update({'short_url': short_url, 'url': url, 'is_created': is_created})
         return render(request, 'url_form.html', ctx)
 
 
