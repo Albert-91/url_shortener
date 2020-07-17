@@ -9,7 +9,7 @@ from .utils import encode_string
 
 class UrlStore(Timestamps, models.Model):
 
-    user_url = models.URLField(_("URL"), blank=False, max_length=1000, null=False, unique=True, validators=[URLValidator()])
+    user_url = models.URLField(_("URL"), blank=False, max_length=1000, null=False, validators=[URLValidator()])
     url_hash = models.CharField(_("Hash URL"), blank=False, max_length=200, null=False, unique=True)
 
     class Meta:
