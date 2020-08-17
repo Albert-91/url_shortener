@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 
-class Timestamps(models.Model):
+class TimestampMixin(models.Model):
 
     created_at = models.DateTimeField(
         _("created at"), auto_now_add=timezone.now, editable=False, blank=True,
