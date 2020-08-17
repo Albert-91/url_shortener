@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 
 from url_shortener.utils import encode_string
 
@@ -52,3 +53,9 @@ class TestStringEncoder(TestCase):
     def test__utils_encode_string__on_size_grater_than_128__should_raise_value_error(self):
         with self.assertRaises(ValueError):
             encode_string('test', 130)
+
+
+class TestUrlView(TestCase):
+
+    def test__aa(self):
+        self.client.post(reverse('home'), )
