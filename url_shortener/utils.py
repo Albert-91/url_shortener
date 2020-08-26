@@ -7,9 +7,9 @@ def encode_string(s: Text, size: int = 10) -> Text:
     """
     Function hashes provided string by BLAKE2 cryptographic algorithm
     https://docs.python.org/3/library/hashlib.html#blake2
-    :param s:
-    :param size:
-    :return: hashed string witn length equal to size parameter
+    :param s: string to encode
+    :param size: integer with size of encoded hash
+    :return: hashed string with length equal to size parameter
     """
 
     if not isinstance(size, int):
