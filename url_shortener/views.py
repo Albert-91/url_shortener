@@ -1,10 +1,11 @@
 import logging
 
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.views import View
 from django.views.generic import FormView
-from django.urls import reverse
+
 from url_shortener.forms import UrlStoreForm
 from url_shortener.models import UrlStore
 
