@@ -9,11 +9,12 @@
 </form>
 
 {% if is_created == False %}
-Your provided URL already exist!
+    Your provided URL already exist!
     <br>
 {% endif %}
+
 {% if short_url != None %}
-Your shorter URL: <a href="{{ url.get_absolute_url }}">{{ short_url }}</a>
+    Your shorter URL: <a href="{{ url.get_absolute_url }}">{{ short_url }}</a>
 {% endif %}
 
 {% endblock %}
