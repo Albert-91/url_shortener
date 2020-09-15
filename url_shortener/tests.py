@@ -1,7 +1,7 @@
+from django.template.loader import render_to_string
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from url_shortener.models import UrlStore
 from url_shortener.utils import encode_string
 
 
@@ -58,34 +58,83 @@ class TestStringEncoder(TestCase):
 
 class TestUrlView(TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        cls.host = "localhost"
+        cls.port = 8000
+        super().setUpClass()
+
     def setUp(self) -> None:
         """This method runs before the execution of each test case."""
         self.client = Client()
         self.url = reverse("home")
 
-    def test__does_url_show_url_form(self):
+    def test__does_url_show_url_form_template(self):
         response = self.client.get(self.url)
-        self.assertEqual(response.template_name[0], 'url_form.html')
+        with self.assertTemplateUsed(template_name='url_form.html'):
+            render_to_string(response.template_name[0])
 
-    def test__is_provided_valid_url_in_post_response(self):
+    def test__status_code_for_valid_url__should_return_200(self):
+        data = {'user_url': "https://www.google.pl"}
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 200)
+
+    def test__provided_valid_url_in_response__should_be_in_html_response(self):
         data = {'user_url': "https://www.google.pl"}
         response = self.client.post(self.url, data)
         self.assertContains(response, data['user_url'])
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.template_name[0], 'url_form.html')
 
-    def test__response_with_provided_invalid_url(self):
+    def test__template_after_provided_valid_url_in_response__should_return_url_form(self):
+        data = {'user_url': "https://www.google.pl"}
+        response = self.client.post(self.url, data)
+        with self.assertTemplateUsed(template_name='url_form.html'):
+            render_to_string(response.template_name[0])
+
+    def test__context_data_from_provided_valid_url_in_response__should_be_in_html_response(self):
+        data = {'user_url': "https://www.google.pl"}
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.context_data['is_created'], True)
+        self.assertEqual(response.context_data['url'].user_url, data['user_url'])
+
+    def test__status_code_for_invalid_url__should_return_200(self):
+        data = {'user_url': "www.google.pl"}
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 200)
+
+    def test__template_after_provided_invalid_url_in_response__should_return_url_form(self):
+        data = {'user_url': "www.google.pl"}
+        response = self.client.post(self.url, data)
+        with self.assertTemplateUsed(template_name='url_form.html'):
+            render_to_string(response.template_name[0])
+
+    def test__response_with_provided_invalid_url__should_contains_info_to_enter_valid_url(self):
         data = {'user_url': "www.google.pl"}
         response = self.client.post(self.url, data)
         self.assertContains(response, "Enter a valid URL.")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.template_name[0], 'url_form.html')
 
-    def test__is_provided_duplicated_valid_url_in_post_response(self):
+    def test__response_after_provided_duplicated_valid_url__should_contains_info_that_url_already_exist(self):
         data = {'user_url': "https://www.google.pl"}
         self.client.post(self.url, data)
         second_response = self.client.post(self.url, data)
-        self.assertContains(second_response, data['user_url'])
         self.assertContains(second_response, "Your provided URL already exist!")
+
+    def test__response_status_code_after_provided_duplicated_valid_url__should_return_200(self):
+        data = {'user_url': "https://www.google.pl"}
+        self.client.post(self.url, data)
+        second_response = self.client.post(self.url, data)
         self.assertEqual(second_response.status_code, 200)
-        self.assertEqual(second_response.template_name[0], 'url_form.html')
+
+    def test__template_of_response_after_provided_duplicated_valid_url__should_return_url_form(self):
+        data = {'user_url': "https://www.google.pl"}
+        self.client.post(self.url, data)
+        second_response = self.client.post(self.url, data)
+        with self.assertTemplateUsed(template_name='url_form.html'):
+            render_to_string(second_response.template_name[0])
+
+    def test__response_of_shortened_url__should_return_redirect_chain_to_original_url(self):
+        data = {'user_url': "https://www.google.pl"}
+        short_url = self.client.post(self.url, data).context_data['short_url']
+        response = self.client.get(short_url, follow=True)
+        self.assertEqual(len(response.redirect_chain), 2)
+        self.assertIn(response.redirect_chain[0][0], short_url + '/')
+        self.assertEqual(response.redirect_chain[1][0], data['user_url'])
