@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # project apps
-    'url_shortener',
+    'project.app.url_shortener',
 ]
 
 MIDDLEWARE = [
