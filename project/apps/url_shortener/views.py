@@ -6,8 +6,8 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import FormView
 
-from url_shortener.forms import UrlStoreForm
-from url_shortener.models import UrlStore
+from project.apps.url_shortener.forms import UrlStoreForm
+from project.apps.url_shortener.models import UrlStore
 
 logger = logging.getLogger(__name__)
 

@@ -3,7 +3,7 @@ from django.core.validators import URLValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from url_shortener.mixins import TimestampMixin
+from .mixins import TimestampMixin
 from .utils import encode_string
 
 
