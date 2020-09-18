@@ -2,7 +2,7 @@ from django.template.loader import render_to_string
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from url_shortener.utils import encode_string
+from .utils import encode_string
 
 
 class TestStringEncoder(TestCase):

@@ -2,7 +2,7 @@ from django import forms
 from django.core.validators import URLValidator
 from django.forms import CharField
 
-from url_shortener.models import UrlStore
+from project.apps.url_shortener.models import UrlStore
 
 
 class UrlStoreForm(forms.ModelForm):
