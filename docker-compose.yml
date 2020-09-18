@@ -26,7 +26,6 @@ services:
       - 8000:8000
     volumes:
       - ./project:/app/project
-      - ./url_shortener:/app/url_shortener
 
   migration:
     build:
@@ -40,4 +39,3 @@ services:
       - db
     volumes:
       - ./project:/app/project
-      - ./url_shortener:/app/url_shortener
