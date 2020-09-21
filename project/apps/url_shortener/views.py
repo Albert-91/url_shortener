@@ -21,8 +21,7 @@ class UrlView(FormView):
         url, is_created = UrlStore.objects.get_or_create(user_url=form.cleaned_data['user_url'])
         short_url = url.get_short_url()
         if is_created:
-            logger.debug("Created %s" % url)
-            logger.debug('Successfully hashed provided URL with value: %s' % short_url)
+            logger.debug("Successfully saved provided URL: %s with hash value: %s" % (url, short_url))
         return self.render_to_response(
             context=self.get_context_data(short_url=short_url, url=url, is_created=is_created)
         )
