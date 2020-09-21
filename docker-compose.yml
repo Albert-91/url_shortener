@@ -14,7 +14,7 @@ services:
   app:
     build:
       context: .
-    command: bash wait_for_postgres.sh db:5432 python3 manage.py runserver 0.0.0.0:8000
+    command: bash wait_for_postgres.sh db:5432 gunicorn -w 2 -b :8000 project.config.wsgi
     depends_on:
       - db
       - migration
@@ -26,6 +26,7 @@ services:
       - 8000:8000
     volumes:
       - ./project:/app/project
+    working_dir: /app
 
   migration:
     build:
