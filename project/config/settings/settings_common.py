@@ -1,4 +1,4 @@
 from os.path import dirname, abspath
 
 
-PROJECT_ROOT_DIR = dirname(dirname(dirname(dirname(abspath(__file__)))))
+PROJECT_ROOT_DIR = dirname(dirname(dirname(abspath(__file__))))

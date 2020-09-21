@@ -10,7 +10,7 @@ LOGGING = {
 
     'formatters': {
         'formatter_logfile': {
-            'format': '[{levelname}] {asctime} PID{process:d}T{thread:d} {funcName}@{pathname}:{lineno} - {message}',
+            'format': '[{levelname}] {asctime} PID: [{process:d}] T: [{thread:d}] {funcName}@{pathname}:{lineno} - {message}',
             'style': '{',
         },
         'formatter_console': {
@@ -32,20 +32,18 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'formatter_console'
         },
-        # 'logfile': {
-        #     # logs all runtime log messages to file (with logrotate)
-        #     'level': 'INFO',
-        #     'class': 'logging.handlers.RotatingFileHandler',
-        #     'maxBytes': 4 * 1024 ** 2,  # 4MB
-        #     'formatter': 'formatter_logfile',
-        #     'filename': join(LOGS_DIR, 'url_shortener.log'),
-        # },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': join(LOGS_DIR, 'url_shortener.log'),
+            'formatter': 'formatter_logfile',
+            'maxBytes': 4 * 1024 ** 2,
+        },
     },
 
     'loggers': {
         'project': {
-            # 'handlers': ['logfile', 'console'],
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'DEBUG',
         },
     },
